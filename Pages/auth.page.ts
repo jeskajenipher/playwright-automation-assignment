@@ -10,7 +10,6 @@ export class AuthPage extends BasePage {
   readonly signupButton: Locator;
   readonly loginErrorMsg: Locator;
 
-  // Registration Form
   readonly genderMrRadio: Locator;
   readonly passwordInput: Locator;
   readonly firstNameInput: Locator;
@@ -26,7 +25,6 @@ export class AuthPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    // 🌟 Change all 'self.' to 'this.' inside the constructor
     this.loginEmailInput = page.locator('[data-qa="login-email"]');
     this.loginPasswordInput = page.locator('[data-qa="login-password"]');
     this.loginButton = page.locator('[data-qa="login-button"]');
@@ -50,21 +48,18 @@ export class AuthPage extends BasePage {
   }
 
   async login(email: string, pass: string) {
-    // 🌟 Change 'self.' to 'this.' here
     await this.loginEmailInput.fill(email);
     await this.loginPasswordInput.fill(pass);
     await this.loginButton.click();
   }
 
   async initiateSignup(name: string, email: string) {
-    // 🌟 Change 'self.' to 'this.' here
     await this.signupNameInput.fill(name);
     await this.signupEmailInput.fill(email);
     await this.signupButton.click();
   }
 
   async completeRegistration(password: string) {
-    // 🌟 Change 'self.' to 'this.' here
     await this.genderMrRadio.click();
     await this.passwordInput.fill(password);
     await this.firstNameInput.fill('QA');

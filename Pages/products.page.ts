@@ -12,10 +12,8 @@ export class ProductsPage extends BasePage {
     super(page);
     this.searchInput = page.locator('#search_product');
     this.searchButton = page.locator('#submit_search');
-    // Targets the actual visible product container overlay matching the application code
     this.firstProductOverlay = page.locator('.single-products').first();
     this.firstAddToCartBtn = page.locator('.add-to-cart').first();
-    // 🌟 FIX: Target the button using its exact text matching the modal card layout
     this.continueShoppingBtn = page.getByRole('button', { name: 'Continue Shopping' });
   }
 
@@ -27,7 +25,6 @@ export class ProductsPage extends BasePage {
   async addFirstProductToCart() {
     await this.firstProductOverlay.hover();
     await this.firstAddToCartBtn.click();
-    // Closes the popup modal safely
     await this.continueShoppingBtn.click(); 
   }
 }

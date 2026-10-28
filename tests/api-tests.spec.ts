@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Automation Exercise REST API Validation Engine', () => {
-  // Enforce sequential execution so account creation happens before verification, updating, and deletion
   test.describe.configure({ mode: 'serial' });
 
-  // 🌟 FIX: Added 'www.' to prevent the server from redirecting to an HTML landing page
   const baseApiUrl = 'https://www.automationexercise.com/api';
   const testUserEmail = `api_engine_suite_${Date.now()}@mail.com`;
   const defaultPassword = 'EnginePassWord1!';
@@ -14,7 +12,6 @@ test.describe('Automation Exercise REST API Validation Engine', () => {
     'Accept': 'application/json, text/plain, */*'
   };
 
-  // Helper function to handle parsing safely and output diagnostics if the server serves HTML
   const parseSafeJson = (text: string, endpointName: string) => {
     const trimmed = text.trim();
     if (trimmed.startsWith('<')) {
