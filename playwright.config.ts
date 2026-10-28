@@ -11,9 +11,14 @@ export default defineConfig({
     ['allure-playwright', { outputFolder: 'allure-results' }]
   ],
   use: {
-    baseURL: 'https://www.automationexercise.com',
+    baseURL: 'https://automationexercise.com',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    // 🌟 Forces standard desktop sizing in headless CI environments
+    viewport: { width: 1280, height: 720 },
+    launchOptions: {
+      args: ['--disable-blink-features=AutomationControlled']
+    }
   },
   projects: [
     {
