@@ -1,0 +1,91 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: api-tests.spec.ts >> Automation Exercise REST API Validation Engine >> API 1: Get All Products List
+- Location: tests\api-tests.spec.ts:17:7
+
+# Error details
+
+```
+SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+```
+
+# Test source
+
+```ts
+  1  | import { test, expect } from '@playwright/test';
+  2  | 
+  3  | test.describe('Automation Exercise REST API Validation Engine', () => {
+  4  |   // Enforce sequential execution so account creation happens before verification, updating, and deletion
+  5  |   test.describe.configure({ mode: 'serial' });
+  6  | 
+  7  |   const baseApiUrl = 'https://automationexercise.com';
+  8  |   const testUserEmail = `api_engine_suite_${Date.now()}@mail.com`;
+  9  |   const defaultPassword = 'EnginePassWord1!';
+  10 | 
+  11 |   // Standard headers to simulate a real browser request and bypass firewall block pages
+  12 |   const standardHeaders = {
+  13 |     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  14 |     'Accept': 'application/json, text/plain, */*'
+  15 |   };
+  16 | 
+  17 |   test('API 1: Get All Products List', async ({ request }) => {
+  18 |     const response = await request.get(`${baseApiUrl}/productsList`, { headers: standardHeaders });
+  19 |     expect(response.status()).toBe(200);
+> 20 |     const body = await response.json();
+     |                  ^ SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+  21 |     expect(body).toHaveProperty('responseCode', 200);
+  22 |     expect(body).toHaveProperty('products');
+  23 |   });
+  24 | 
+  25 |   test('API 5: Post/Search Product', async ({ request }) => {
+  26 |     const response = await request.post(`${baseApiUrl}/searchProduct`, {
+  27 |       headers: standardHeaders,
+  28 |       form: { search_product: 'tshirt' }
+  29 |     });
+  30 |     expect(response.status()).toBe(200);
+  31 |     const body = await response.json();
+  32 |     expect(body).toHaveProperty('responseCode', 200);
+  33 |   });
+  34 | 
+  35 |   test('API 11: Create User Account', async ({ request }) => {
+  36 |     const response = await request.post(`${baseApiUrl}/createAccount`, {
+  37 |       headers: standardHeaders,
+  38 |       form: { name: 'API Engine Automation', email: testUserEmail, password: defaultPassword, title: 'Mr', birth_date: '15', birth_month: '08', birth_year: '1995', firstname: 'API', lastname: 'Automation' }
+  39 |     });
+  40 |     expect(response.status()).toBe(200);
+  41 |     const body = await response.json();
+  42 |     expect(body).toHaveProperty('responseCode', 201);
+  43 |   });
+  44 | 
+  45 |   test('API 7: Verify Login', async ({ request }) => {
+  46 |     const response = await request.post(`${baseApiUrl}/verifyLogin`, {
+  47 |       headers: standardHeaders,
+  48 |       form: { email: testUserEmail, password: defaultPassword }
+  49 |     });
+  50 |     expect(response.status()).toBe(200);
+  51 |   });
+  52 | 
+  53 |   test('API 13: Update User Account', async ({ request }) => {
+  54 |     const response = await request.post(`${baseApiUrl}/updateAccount`, {
+  55 |       headers: standardHeaders,
+  56 |       form: { name: 'Updated', email: testUserEmail, password: defaultPassword }
+  57 |     });
+  58 |     expect(response.status()).toBe(200);
+  59 |   });
+  60 | 
+  61 |   test('API 12: Delete Account', async ({ request }) => {
+  62 |     const response = await request.delete(`${baseApiUrl}/deleteAccount`, {
+  63 |       headers: standardHeaders,
+  64 |       form: { email: testUserEmail, password: defaultPassword }
+  65 |     });
+  66 |     expect(response.status()).toBe(200);
+  67 |   });
+  68 | });
+  69 | 
+```

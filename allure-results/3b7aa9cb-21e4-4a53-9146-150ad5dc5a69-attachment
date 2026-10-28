@@ -1,0 +1,127 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: api-tests.spec.ts >> Automation Exercise REST API Validation Engine >> API 13: Update User Account Metatags
+- Location: tests\api-tests.spec.ts:71:7
+
+# Error details
+
+```
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 200
+Received: 405
+```
+
+# Test source
+
+```ts
+  1   | import { test, expect } from '@playwright/test';
+  2   | 
+  3   | test.describe('Automation Exercise REST API Validation Engine', () => {
+  4   |   const baseApiUrl = 'https://automationexercise.com/api';
+  5   |   const testUserEmail = `api_engine_suite_${Date.now()}@mail.com`;
+  6   |   const defaultPassword = 'EnginePassWord1!';
+  7   | 
+  8   |   test('API 1: Get All Products List', async ({ request }) => {
+  9   |     const response = await request.get(`${baseApiUrl}/productsList`);
+  10  |     expect(response.status()).toBe(200);
+  11  | 
+  12  |     const body = await response.json();
+  13  |     expect(body).toHaveProperty('responseCode', 200);
+  14  |     expect(body).toHaveProperty('products');
+  15  |     expect(Array.isArray(body.products)).toBe(true);
+  16  |   });
+  17  | 
+  18  |   test('API 5: Post/Search Product', async ({ request }) => {
+  19  |     const response = await request.post(`${baseApiUrl}/searchProduct`, {
+  20  |       form: { search_product: 'tshirt' }
+  21  |     });
+  22  |     expect(response.status()).toBe(200);
+  23  | 
+  24  |     const body = await response.json();
+  25  |     expect(body).toHaveProperty('responseCode', 200);
+  26  |     expect(body).toHaveProperty('products');
+  27  |   });
+  28  | 
+  29  |   test('API 11: Create User Account', async ({ request }) => {
+  30  |     const response = await request.post(`${baseApiUrl}/createAccount`, {
+  31  |       form: {
+  32  |         name: 'API Engine Automation',
+  33  |         email: testUserEmail,
+  34  |         password: defaultPassword,
+  35  |         title: 'Mr',
+  36  |         birth_date: '15',
+  37  |         birth_month: '08',
+  38  |         birth_year: '1995',
+  39  |         firstname: 'API',
+  40  |         lastname: 'Automation',
+  41  |         company: 'Automated QA Ltd',
+  42  |         address1: 'Cloud Infrastructure St 101',
+  43  |         country: 'United States',
+  44  |         zipcode: '90210',
+  45  |         state: 'California',
+  46  |         city: 'Los Angeles',
+  47  |         mobile_number: '19998887766'
+  48  |       }
+  49  |     });
+  50  |     expect(response.status()).toBe(200);
+  51  | 
+  52  |     const body = await response.json();
+  53  |     expect(body).toHaveProperty('responseCode', 201);
+  54  |     expect(body.message).toBe('User created!');
+  55  |   });
+  56  | 
+  57  |   test('API 7: Verify Login with Valid System Credentials', async ({ request }) => {
+  58  |     const response = await request.post(`${baseApiUrl}/verifyLogin`, {
+  59  |       form: {
+  60  |         email: testUserEmail,
+  61  |         password: defaultPassword
+  62  |       }
+  63  |     });
+  64  |     expect(response.status()).toBe(200);
+  65  | 
+  66  |     const body = await response.json();
+  67  |     expect(body).toHaveProperty('responseCode', 200);
+  68  |     expect(body.message).toBe('User exists!');
+  69  |   });
+  70  | 
+  71  |   test('API 13: Update User Account Metatags', async ({ request }) => {
+  72  |     const response = await request.post(`${baseApiUrl}/updateAccount`, {
+  73  |       form: {
+  74  |         name: 'API Engine Configuration Updated',
+  75  |         email: testUserEmail,
+  76  |         password: defaultPassword,
+  77  |         firstname: 'UpdatedAPI',
+  78  |         lastname: 'UpdatedAutomation'
+  79  |       }
+  80  |     });
+> 81  |     expect(response.status()).toBe(200);
+      |                               ^ Error: expect(received).toBe(expected) // Object.is equality
+  82  | 
+  83  |     const body = await response.json();
+  84  |     expect(body).toHaveProperty('responseCode', 200);
+  85  |     expect(body.message).toBe('User updated!');
+  86  |   });
+  87  | 
+  88  |   test('API 12: Delete Target Operational User Account', async ({ request }) => {
+  89  |     const response = await request.delete(`${baseApiUrl}/deleteAccount`, {
+  90  |       form: {
+  91  |         email: testUserEmail,
+  92  |         password: defaultPassword
+  93  |       }
+  94  |     });
+  95  |     expect(response.status()).toBe(200);
+  96  | 
+  97  |     const body = await response.json();
+  98  |     expect(body).toHaveProperty('responseCode', 200);
+  99  |     expect(body.message).toBe('Account deleted!');
+  100 |   });
+  101 | });
+  102 | 
+```

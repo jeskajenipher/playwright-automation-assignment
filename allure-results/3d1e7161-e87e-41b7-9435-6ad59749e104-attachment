@@ -1,0 +1,67 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: ui-e2e.spec.ts >> E2E E-Commerce User Flows >> E2E: Dynamic User Lifecycle - Signup, Login, Purchase & Verification
+- Location: tests\ui-e2e.spec.ts:13:7
+
+# Error details
+
+```
+TypeError: _auth.AuthPage is not a constructor
+```
+
+# Test source
+
+```ts
+  1  | import { test, expect } from '@playwright/test';
+  2  | import { AuthPage } from '../pages/auth.page';
+  3  | import { ProductsPage } from '../pages/products.page';
+  4  | import { CartPage } from '../pages/cart.page';
+  5  | 
+  6  | test.describe('E2E E-Commerce User Flows', () => {
+  7  |   let uniqueEmail: string;
+  8  | 
+  9  |   test.beforeEach(() => {
+  10 |     uniqueEmail = `playwright_user_${Date.now()}@mail.com`;
+  11 |   });
+  12 | 
+  13 |   test('E2E: Dynamic User Lifecycle - Signup, Login, Purchase & Verification', async ({ page }) => {
+> 14 |     const authPage = new AuthPage(page);
+     |                      ^ TypeError: _auth.AuthPage is not a constructor
+  15 |     const productsPage = new ProductsPage(page);
+  16 |     const cartPage = new CartPage(page);
+  17 | 
+  18 |     // 1. New User Registration
+  19 |     await authPage.navigateTo('/login');
+  20 |     await authPage.initiateSignup('UI Tester', uniqueEmail);
+  21 |     await authPage.completeRegistration('SecurePass123!');
+  22 |     await expect(authPage.accountCreatedHeader).toBeVisible();
+  23 | 
+  24 |     // 2. Clear Session and test Invalid Login validation
+  25 |     await authPage.navigateTo('/login');
+  26 |     await authPage.login(uniqueEmail, 'WrongPassword!');
+  27 |     await expect(authPage.loginErrorMsg).toContainText('Your email or password is incorrect!');
+  28 | 
+  29 |     // 3. Valid Login Verification
+  30 |     await authPage.login(uniqueEmail, 'SecurePass123!');
+  31 |     await expect(page.locator('text=Logged in as UI Tester')).toBeVisible();
+  32 | 
+  33 |     // 4. Dynamic Product Search & E-Commerce Cart Add
+  34 |     await productsPage.navProducts.click();
+  35 |     await productsPage.searchProduct('tshirt');
+  36 |     await productsPage.addFirstProductToCart();
+  37 | 
+  38 |     // 5. Checkout Process & Order Submission
+  39 |     await productsPage.navCart.click();
+  40 |     await cartPage.checkoutAndPlaceOrder('Automated purchase via Playwright execution framework.');
+  41 |     await cartPage.submitPayment();
+  42 |     await expect(cartPage.orderSuccessMsg).toBeVisible();
+  43 |   });
+  44 | });
+  45 | 
+```

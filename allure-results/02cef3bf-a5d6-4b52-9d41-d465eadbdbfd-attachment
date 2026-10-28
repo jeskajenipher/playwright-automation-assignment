@@ -1,0 +1,145 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: api-tests.spec.ts >> Automation Exercise REST API Validation Engine >> API 13: Update User Account
+- Location: tests\api-tests.spec.ts:92:7
+
+# Error details
+
+```
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 200
+Received: 405
+```
+
+# Test source
+
+```ts
+  3   | test.describe('Automation Exercise REST API Validation Engine', () => {
+  4   |   // Enforce sequential execution so account creation happens before verification, updating, and deletion
+  5   |   test.describe.configure({ mode: 'serial' });
+  6   | 
+  7   |   // 🌟 FIX: Added 'www.' to prevent the server from redirecting to an HTML landing page
+  8   |   const baseApiUrl = 'https://www.automationexercise.com/api';
+  9   |   const testUserEmail = `api_engine_suite_${Date.now()}@mail.com`;
+  10  |   const defaultPassword = 'EnginePassWord1!';
+  11  | 
+  12  |   const standardHeaders = {
+  13  |     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  14  |     'Accept': 'application/json, text/plain, */*'
+  15  |   };
+  16  | 
+  17  |   // Helper function to handle parsing safely and output diagnostics if the server serves HTML
+  18  |   const parseSafeJson = (text: string, endpointName: string) => {
+  19  |     const trimmed = text.trim();
+  20  |     if (trimmed.startsWith('<')) {
+  21  |       console.error(`\n[DIAGNOSTIC] ${endpointName} returned HTML instead of JSON! First 300 chars:`);
+  22  |       console.error(trimmed.substring(0, 300));
+  23  |       return { responseCode: 500, message: "Server returned HTML instead of JSON" };
+  24  |     }
+  25  |     return JSON.parse(text);
+  26  |   };
+  27  | 
+  28  |   test('API 1: Get All Products List', async ({ request }) => {
+  29  |     const response = await request.get(`${baseApiUrl}/productsList`, { headers: standardHeaders });
+  30  |     expect(response.status()).toBe(200);
+  31  |     
+  32  |     const text = await response.text();
+  33  |     const body = parseSafeJson(text, 'API 1 (productsList)');
+  34  |     
+  35  |     expect(body.responseCode).toBe(200);
+  36  |     expect(body).toHaveProperty('products');
+  37  |   });
+  38  | 
+  39  |   test('API 5: Post/Search Product', async ({ request }) => {
+  40  |     const response = await request.post(`${baseApiUrl}/searchProduct`, {
+  41  |       headers: standardHeaders,
+  42  |       form: { search_product: 'tshirt' }
+  43  |     });
+  44  |     expect(response.status()).toBe(200);
+  45  |     
+  46  |     const text = await response.text();
+  47  |     const body = parseSafeJson(text, 'API 5 (searchProduct)');
+  48  |     expect(body.responseCode).toBe(200);
+  49  |   });
+  50  | 
+  51  |   test('API 11: Create User Account', async ({ request }) => {
+  52  |     const response = await request.post(`${baseApiUrl}/createAccount`, {
+  53  |       headers: standardHeaders,
+  54  |       form: { 
+  55  |         name: 'API Engine Automation', 
+  56  |         email: testUserEmail, 
+  57  |         password: defaultPassword, 
+  58  |         title: 'Mr', 
+  59  |         birth_date: '15', 
+  60  |         birth_month: '08', 
+  61  |         birth_year: '1995', 
+  62  |         firstname: 'API', 
+  63  |         lastname: 'Automation',
+  64  |         company: 'QA Corp',
+  65  |         address1: '123 Test St',
+  66  |         country: 'United States',
+  67  |         zipcode: '12345',
+  68  |         state: 'Texas',
+  69  |         city: 'Austin',
+  70  |         mobile_number: '1234567890'
+  71  |       }
+  72  |     });
+  73  |     expect(response.status()).toBe(200);
+  74  |     
+  75  |     const text = await response.text();
+  76  |     const body = parseSafeJson(text, 'API 11 (createAccount)');
+  77  |     expect(body.responseCode).toBe(201);
+  78  |   });
+  79  | 
+  80  |   test('API 7: Verify Login', async ({ request }) => {
+  81  |     const response = await request.post(`${baseApiUrl}/verifyLogin`, {
+  82  |       headers: standardHeaders,
+  83  |       form: { email: testUserEmail, password: defaultPassword }
+  84  |     });
+  85  |     expect(response.status()).toBe(200);
+  86  |     
+  87  |     const text = await response.text();
+  88  |     const body = parseSafeJson(text, 'API 7 (verifyLogin)');
+  89  |     expect(body.responseCode).toBe(200);
+  90  |   });
+  91  | 
+  92  |   test('API 13: Update User Account', async ({ request }) => {
+  93  |     const response = await request.post(`${baseApiUrl}/updateAccount`, {
+  94  |       headers: standardHeaders,
+  95  |       form: { 
+  96  |         name: 'Updated', 
+  97  |         email: testUserEmail, 
+  98  |         password: defaultPassword,
+  99  |         firstname: 'UpdatedAPI',
+  100 |         lastname: 'UpdatedAutomation'
+  101 |       }
+  102 |     });
+> 103 |     expect(response.status()).toBe(200);
+      |                               ^ Error: expect(received).toBe(expected) // Object.is equality
+  104 |     
+  105 |     const text = await response.text();
+  106 |     const body = parseSafeJson(text, 'API 13 (updateAccount)');
+  107 |     expect(body.responseCode).toBe(200);
+  108 |   });
+  109 | 
+  110 |   test('API 12: Delete Account', async ({ request }) => {
+  111 |     const response = await request.delete(`${baseApiUrl}/deleteAccount`, {
+  112 |       headers: standardHeaders,
+  113 |       form: { email: testUserEmail, password: defaultPassword }
+  114 |     });
+  115 |     expect(response.status()).toBe(200);
+  116 |     
+  117 |     const text = await response.text();
+  118 |     const body = parseSafeJson(text, 'API 12 (deleteAccount)');
+  119 |     expect(body.responseCode).toBe(200);
+  120 |   });
+  121 | });
+  122 | 
+```

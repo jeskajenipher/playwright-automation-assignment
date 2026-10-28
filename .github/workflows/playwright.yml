@@ -1,0 +1,44 @@
+name: Playwright Framework Regression Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-and-report:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository Source
+      uses: actions/checkout@v4
+
+    - name: Initialize Node.js Environment
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+
+    - name: Install Runtime Dependencies
+      run: npm ci
+
+    - name: Setup System Playwright Browsers
+      run: npx playwright install --with-deps
+
+    - name: Run Test Specifications Suite
+      run: npx playwright test
+
+    - name: Parse and Format Allure Test Metrics
+      if: always()
+      run: |
+        npm install -g allure-commandline
+        allure generate allure-results --clean -o allure-report
+
+    - name: Archive Allure Artifact Delivery
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-execution-report
+        path: allure-report/
+        retention-days: 10

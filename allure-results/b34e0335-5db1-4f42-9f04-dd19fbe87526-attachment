@@ -1,0 +1,157 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: ui-e2e.spec.ts >> E2E E-Commerce User Flows >> E2E: Dynamic User Lifecycle - Signup, Login, Purchase & Verification
+- Location: tests\ui-e2e.spec.ts:13:7
+
+# Error details
+
+```
+Test timeout of 30000ms exceeded.
+```
+
+```
+Error: locator.click: Test timeout of 30000ms exceeded.
+Call log:
+  - waiting for locator('a[href="/logout"]')
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=f20e1]:
+  - banner [ref=f20e2]:
+    - generic [ref=f20e5]:
+      - link [ref=f20e8] [cursor=pointer]:
+        - /url: /
+        - img "Automation Exercise website" [ref=f20e9]
+      - list [ref=f20e12]:
+        - listitem [ref=f20e13]:
+          - link " Home" [ref=f20e14] [cursor=pointer]:
+            - /url: /
+            - generic [ref=f20e15]: 
+            - text: Home
+        - listitem [ref=f20e16]:
+          - link " Products" [ref=f20e17] [cursor=pointer]:
+            - /url: /products
+            - generic [ref=f20e18]: 
+            - text: Products
+        - listitem [ref=f20e19]:
+          - link " Cart" [ref=f20e20] [cursor=pointer]:
+            - /url: /view_cart
+            - generic [ref=f20e21]: 
+            - text: Cart
+        - listitem [ref=f20e22]:
+          - link " Signup / Login" [ref=f20e23] [cursor=pointer]:
+            - /url: /login
+            - generic [ref=f20e24]: 
+            - text: Signup / Login
+        - listitem [ref=f20e25]:
+          - link " Test Cases" [ref=f20e26] [cursor=pointer]:
+            - /url: /test_cases
+            - generic [ref=f20e27]: 
+            - text: Test Cases
+        - listitem [ref=f20e28]:
+          - link " API Testing" [ref=f20e29] [cursor=pointer]:
+            - /url: /api_list
+            - generic [ref=f20e30]: 
+            - text: API Testing
+        - listitem [ref=f20e31]:
+          - link " Video Tutorials" [ref=f20e32] [cursor=pointer]:
+            - /url: https://www.youtube.com/c/AutomationExercise
+            - generic [ref=f20e33]: 
+            - text: Video Tutorials
+        - listitem [ref=f20e34]:
+          - link " Contact us" [ref=f20e35] [cursor=pointer]:
+            - /url: /contact_us
+            - generic [ref=f20e36]: 
+            - text: Contact us
+  - generic [ref=f20e40]:
+    - heading "Account Created!" [level=2] [ref=f20e41]
+    - paragraph [ref=f20e42]:
+      - text: Congratulations! Your new account has been successfully created!
+      - link "Account creation service" [ref=f20e43] [cursor=pointer]
+    - paragraph [ref=f20e47]:
+      - text: You can now take advantage of member privileges to enhance your online
+      - link "shopping" [ref=f20e48] [cursor=pointer]:
+        - /url: "#"
+      - text: experience with us.
+    - link "Continue" [ref=f20e52] [cursor=pointer]:
+      - /url: /
+  - contentinfo [ref=f20e53]:
+    - generic [ref=f20e58]:
+      - heading "Subscription" [level=2] [ref=f20e59]
+      - generic [ref=f20e60]:
+        - textbox "Your email address" [ref=f20e61]
+        - button "" [ref=f20e62] [cursor=pointer]
+        - paragraph [ref=f20e64]: Get the most recent updates from our site and be updated your self...
+    - paragraph [ref=f20e68]: Copyright © 2021 All rights reserved
+  - text: 
+  - insertion [ref=f20e70]:
+    - generic [ref=f20e73]:
+      - heading "These are topics related to the article that might interest you" [level=2] [ref=f20e75]: Discover more
+      - link "Membership privileges program" [ref=f20e76] [cursor=pointer]
+      - link "Automation software tools" [ref=f20e81] [cursor=pointer]
+      - link "Automation consulting service" [ref=f20e86] [cursor=pointer]
+```
+
+# Test source
+
+```ts
+  1  | import { test, expect } from '@playwright/test';
+  2  | import { AuthPage } from '../pages/auth.page';
+  3  | import { ProductsPage } from '../pages/products.page';
+  4  | import { CartPage } from '../pages/cart.page';
+  5  | 
+  6  | test.describe('E2E E-Commerce User Flows', () => {
+  7  |   let uniqueEmail: string;
+  8  | 
+  9  |   test.beforeEach(() => {
+  10 |     uniqueEmail = `playwright_user_${Date.now()}@mail.com`;
+  11 |   });
+  12 | 
+  13 |   test('E2E: Dynamic User Lifecycle - Signup, Login, Purchase & Verification', async ({ page }) => {
+  14 |     const authPage = new AuthPage(page);
+  15 |     const productsPage = new ProductsPage(page);
+  16 |     const cartPage = new CartPage(page);
+  17 | 
+  18 |     // 1. New User Registration
+  19 |     await authPage.navigateTo('/login');
+  20 |     await authPage.initiateSignup('UI Tester', uniqueEmail);
+  21 |     await authPage.completeRegistration('SecurePass123!');
+  22 |     await expect(authPage.accountCreatedHeader).toBeVisible();
+  23 | 
+  24 |     // 2. Clear Session State by logging out
+  25 |     // This ensures the login form inputs are present on the next step
+> 26 |     await page.locator('a[href="/logout"]').click();
+     |                                             ^ Error: locator.click: Test timeout of 30000ms exceeded.
+  27 | 
+  28 |     // 3. Test Invalid Login validation
+  29 |     await authPage.navigateTo('/login');
+  30 |     await authPage.login(uniqueEmail, 'WrongPassword!');
+  31 |     await expect(authPage.loginErrorMsg).toContainText('Your email or password is incorrect!');
+  32 | 
+  33 |     // 4. Valid Login Verification
+  34 |     await authPage.login(uniqueEmail, 'SecurePass123!');
+  35 |     await expect(page.locator('text=Logged in as UI Tester')).toBeVisible();
+  36 | 
+  37 |     // 5. Dynamic Product Search & E-Commerce Cart Add
+  38 |     await productsPage.navProducts.click();
+  39 |     await productsPage.searchProduct('tshirt');
+  40 |     await productsPage.addFirstProductToCart();
+  41 | 
+  42 |     // 6. Checkout Process & Order Submission
+  43 |     await productsPage.navCart.click();
+  44 |     await cartPage.checkoutAndPlaceOrder('Automated purchase via Playwright execution framework.');
+  45 |     await cartPage.submitPayment();
+  46 |     await expect(cartPage.orderSuccessMsg).toBeVisible();
+  47 |   });
+  48 | });
+  49 | 
+```

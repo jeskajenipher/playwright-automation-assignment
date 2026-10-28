@@ -1,0 +1,338 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: ui-e2e.spec.ts >> E2E E-Commerce User Flows >> E2E: Dynamic User Lifecycle - Signup, Login, Purchase & Verification
+- Location: tests\ui-e2e.spec.ts:13:7
+
+# Error details
+
+```
+Test timeout of 30000ms exceeded.
+```
+
+```
+Error: locator.click: Test timeout of 30000ms exceeded.
+Call log:
+  - waiting for locator('.close-checkout-modal')
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=f68e1]:
+  - banner [ref=f68e2]:
+    - generic [ref=f68e5]:
+      - link [ref=f68e8] [cursor=pointer]:
+        - /url: /
+        - img "Website for automation practice" [ref=f68e9]
+      - list [ref=f68e12]:
+        - listitem [ref=f68e13]:
+          - link " Home" [ref=f68e14] [cursor=pointer]:
+            - /url: /
+            - generic [ref=f68e15]: 
+            - text: Home
+        - listitem [ref=f68e16]:
+          - link " Products" [ref=f68e17] [cursor=pointer]:
+            - /url: /products
+            - generic [ref=f68e18]: 
+            - text: Products
+        - listitem [ref=f68e19]:
+          - link " Cart" [ref=f68e20] [cursor=pointer]:
+            - /url: /view_cart
+            - generic [ref=f68e21]: 
+            - text: Cart
+        - listitem [ref=f68e22]:
+          - link " Logout" [ref=f68e23] [cursor=pointer]:
+            - /url: /logout
+            - generic [ref=f68e24]: 
+            - text: Logout
+        - listitem [ref=f68e25]:
+          - link " Delete Account" [ref=f68e26] [cursor=pointer]:
+            - /url: /delete_account
+            - generic [ref=f68e27]: 
+            - text: Delete Account
+        - listitem [ref=f68e28]:
+          - link " Test Cases" [ref=f68e29] [cursor=pointer]:
+            - /url: /test_cases
+            - generic [ref=f68e30]: 
+            - text: Test Cases
+        - listitem [ref=f68e31]:
+          - link " API Testing" [ref=f68e32] [cursor=pointer]:
+            - /url: /api_list
+            - generic [ref=f68e33]: 
+            - text: API Testing
+        - listitem [ref=f68e34]:
+          - link " Video Tutorials" [ref=f68e35] [cursor=pointer]:
+            - /url: https://www.youtube.com/c/AutomationExercise
+            - generic [ref=f68e36]: 
+            - text: Video Tutorials
+        - listitem [ref=f68e37]:
+          - link " Contact us" [ref=f68e38] [cursor=pointer]:
+            - /url: /contact_us
+            - generic [ref=f68e39]: 
+            - text: Contact us
+        - listitem [ref=f68e40]:
+          - generic [ref=f68e41]:
+            - generic [ref=f68e42]: 
+            - text: Logged in as UI Tester
+  - generic [ref=f68e44]:
+    - img "Website for practice" [ref=f68e45]
+    - textbox "Search Product" [ref=f68e46]: tshirt
+    - button "" [ref=f68e47] [cursor=pointer]
+  - generic [ref=f68e51]:
+    - generic [ref=f68e53]:
+      - heading "Category" [level=2] [ref=f68e54]
+      - generic [ref=f68e55]:
+        - heading [level=4] [ref=f68e58]:
+          - link " Women" [ref=f68e59] [cursor=pointer]:
+            - /url: "#Women"
+            - generic [ref=f68e60]: 
+            - text: Women
+        - heading [level=4] [ref=f68e64]:
+          - link " Men" [ref=f68e65] [cursor=pointer]:
+            - /url: "#Men"
+            - generic [ref=f68e66]: 
+            - text: Men
+        - heading [level=4] [ref=f68e70]:
+          - link " Kids" [ref=f68e71] [cursor=pointer]:
+            - /url: "#Kids"
+            - generic [ref=f68e72]: 
+            - text: Kids
+      - generic [ref=f68e74]:
+        - heading "Brands" [level=2] [ref=f68e75]
+        - list [ref=f68e77]:
+          - listitem [ref=f68e78]:
+            - link "(6) Polo" [ref=f68e79] [cursor=pointer]:
+              - /url: /brand_products/Polo
+              - generic [ref=f68e80]: (6)
+              - text: Polo
+          - listitem [ref=f68e81]:
+            - link "(5) H&M" [ref=f68e82] [cursor=pointer]:
+              - /url: /brand_products/H&M
+              - generic [ref=f68e83]: (5)
+              - text: H&M
+          - listitem [ref=f68e84]:
+            - link "(5) Madame" [ref=f68e85] [cursor=pointer]:
+              - /url: /brand_products/Madame
+              - generic [ref=f68e86]: (5)
+              - text: Madame
+          - listitem [ref=f68e87]:
+            - link "(3) Mast & Harbour" [ref=f68e88] [cursor=pointer]:
+              - /url: /brand_products/Mast & Harbour
+              - generic [ref=f68e89]: (3)
+              - text: Mast & Harbour
+          - listitem [ref=f68e90]:
+            - link "(4) Babyhug" [ref=f68e91] [cursor=pointer]:
+              - /url: /brand_products/Babyhug
+              - generic [ref=f68e92]: (4)
+              - text: Babyhug
+          - listitem [ref=f68e93]:
+            - link "(3) Allen Solly Junior" [ref=f68e94] [cursor=pointer]:
+              - /url: /brand_products/Allen Solly Junior
+              - generic [ref=f68e95]: (3)
+              - text: Allen Solly Junior
+          - listitem [ref=f68e96]:
+            - link "(3) Kookie Kids" [ref=f68e97] [cursor=pointer]:
+              - /url: /brand_products/Kookie Kids
+              - generic [ref=f68e98]: (3)
+              - text: Kookie Kids
+          - listitem [ref=f68e99]:
+            - link "(5) Biba" [ref=f68e100] [cursor=pointer]:
+              - /url: /brand_products/Biba
+              - generic [ref=f68e101]: (5)
+              - text: Biba
+    - generic [ref=f68e103]:
+      - heading "Searched Products" [level=2] [ref=f68e104]
+      - generic [ref=f68e107]:
+        - generic [ref=f68e108]:
+          - generic [ref=f68e109]: 
+          - heading "Added!" [level=4] [ref=f68e111]
+        - generic [ref=f68e112]:
+          - paragraph [ref=f68e113]: Your product has been added to cart.
+          - paragraph [ref=f68e114]:
+            - link "View Cart" [ref=f68e115] [cursor=pointer]:
+              - /url: /view_cart
+        - button "Continue Shopping" [ref=f68e117] [cursor=pointer]
+      - generic [ref=f68e119]:
+        - generic [ref=f68e120]:
+          - generic [ref=f68e121]:
+            - img "ecommerce website products" [ref=f68e122]
+            - heading "Rs. 400" [level=2] [ref=f68e123]
+            - paragraph [ref=f68e124]: Men Tshirt
+            - generic [ref=f68e125] [cursor=pointer]:
+              - generic [ref=f68e126]: 
+              - text: Add to cart
+          - generic [ref=f68e127]:
+            - heading "Rs. 400" [level=2] [ref=f68e128]
+            - paragraph [ref=f68e129]: Men Tshirt
+            - generic [ref=f68e130] [cursor=pointer]:
+              - generic [ref=f68e131]: 
+              - text: Add to cart
+        - list [ref=f68e133]:
+          - listitem [ref=f68e134]:
+            - link " View Product" [ref=f68e135] [cursor=pointer]:
+              - /url: /product_details/2
+              - generic [ref=f68e136]: 
+              - text: View Product
+      - generic [ref=f68e138]:
+        - generic [ref=f68e139]:
+          - generic [ref=f68e140]:
+            - img "ecommerce website products" [ref=f68e141]
+            - heading "Rs. 1299" [level=2] [ref=f68e142]
+            - paragraph [ref=f68e143]: Pure Cotton V-Neck T-Shirt
+            - generic [ref=f68e144] [cursor=pointer]:
+              - generic [ref=f68e145]: 
+              - text: Add to cart
+          - generic [ref=f68e146]:
+            - heading "Rs. 1299" [level=2] [ref=f68e147]
+            - paragraph [ref=f68e148]: Pure Cotton V-Neck T-Shirt
+            - generic [ref=f68e149] [cursor=pointer]:
+              - generic [ref=f68e150]: 
+              - text: Add to cart
+        - list [ref=f68e152]:
+          - listitem [ref=f68e153]:
+            - link " View Product" [ref=f68e154] [cursor=pointer]:
+              - /url: /product_details/28
+              - generic [ref=f68e155]: 
+              - text: View Product
+      - generic [ref=f68e157]:
+        - generic [ref=f68e158]:
+          - generic [ref=f68e159]:
+            - img "ecommerce website products" [ref=f68e160]
+            - heading "Rs. 1000" [level=2] [ref=f68e161]
+            - paragraph [ref=f68e162]: Green Side Placket Detail T-Shirt
+            - generic [ref=f68e163] [cursor=pointer]:
+              - generic [ref=f68e164]: 
+              - text: Add to cart
+          - generic [ref=f68e165]:
+            - heading "Rs. 1000" [level=2] [ref=f68e166]
+            - paragraph [ref=f68e167]: Green Side Placket Detail T-Shirt
+            - generic [ref=f68e168] [cursor=pointer]:
+              - generic [ref=f68e169]: 
+              - text: Add to cart
+        - list [ref=f68e171]:
+          - listitem [ref=f68e172]:
+            - link " View Product" [ref=f68e173] [cursor=pointer]:
+              - /url: /product_details/29
+              - generic [ref=f68e174]: 
+              - text: View Product
+      - generic [ref=f68e176]:
+        - generic [ref=f68e177]:
+          - generic [ref=f68e178]:
+            - img "ecommerce website products" [ref=f68e179]
+            - heading "Rs. 1500" [level=2] [ref=f68e180]
+            - paragraph [ref=f68e181]: Premium Polo T-Shirts
+            - generic [ref=f68e182] [cursor=pointer]:
+              - generic [ref=f68e183]: 
+              - text: Add to cart
+          - generic [ref=f68e184]:
+            - heading "Rs. 1500" [level=2] [ref=f68e185]
+            - paragraph [ref=f68e186]: Premium Polo T-Shirts
+            - generic [ref=f68e187] [cursor=pointer]:
+              - generic [ref=f68e188]: 
+              - text: Add to cart
+        - list [ref=f68e190]:
+          - listitem [ref=f68e191]:
+            - link " View Product" [ref=f68e192] [cursor=pointer]:
+              - /url: /product_details/30
+              - generic [ref=f68e193]: 
+              - text: View Product
+      - generic [ref=f68e195]:
+        - generic [ref=f68e196]:
+          - generic [ref=f68e197]:
+            - img "ecommerce website products" [ref=f68e198]
+            - heading "Rs. 850" [level=2] [ref=f68e199]
+            - paragraph [ref=f68e200]: Pure Cotton Neon Green Tshirt
+            - generic [ref=f68e201] [cursor=pointer]:
+              - generic [ref=f68e202]: 
+              - text: Add to cart
+          - generic [ref=f68e203]:
+            - heading "Rs. 850" [level=2] [ref=f68e204]
+            - paragraph [ref=f68e205]: Pure Cotton Neon Green Tshirt
+            - generic [ref=f68e206] [cursor=pointer]:
+              - generic [ref=f68e207]: 
+              - text: Add to cart
+        - list [ref=f68e209]:
+          - listitem [ref=f68e210]:
+            - link " View Product" [ref=f68e211] [cursor=pointer]:
+              - /url: /product_details/31
+              - generic [ref=f68e212]: 
+              - text: View Product
+      - generic [ref=f68e214]:
+        - generic [ref=f68e215]:
+          - generic [ref=f68e216]:
+            - img "ecommerce website products" [ref=f68e217]
+            - heading "Rs. 1389" [level=2] [ref=f68e218]
+            - paragraph [ref=f68e219]: GRAPHIC DESIGN MEN T SHIRT - BLUE
+            - generic [ref=f68e220] [cursor=pointer]:
+              - generic [ref=f68e221]: 
+              - text: Add to cart
+          - generic [ref=f68e222]:
+            - heading "Rs. 1389" [level=2] [ref=f68e223]
+            - paragraph [ref=f68e224]: GRAPHIC DESIGN MEN T SHIRT - BLUE
+            - generic [ref=f68e225] [cursor=pointer]:
+              - generic [ref=f68e226]: 
+              - text: Add to cart
+        - list [ref=f68e228]:
+          - listitem [ref=f68e229]:
+            - link " View Product" [ref=f68e230] [cursor=pointer]:
+              - /url: /product_details/43
+              - generic [ref=f68e231]: 
+              - text: View Product
+  - generic:
+    - insertion:
+      - generic:
+        - iframe
+  - contentinfo [ref=f68e232]:
+    - generic [ref=f68e237]:
+      - heading "Subscription" [level=2] [ref=f68e238]
+      - generic [ref=f68e239]:
+        - textbox "Your email address" [ref=f68e240]
+        - button "" [ref=f68e241] [cursor=pointer]
+        - paragraph [ref=f68e243]: Get the most recent updates from our site and be updated your self...
+    - paragraph [ref=f68e247]: Copyright © 2021 All rights reserved
+  - text: 
+```
+
+# Test source
+
+```ts
+  1  | import { Page, Locator } from '@playwright/test';
+  2  | import { BasePage } from './base.page';
+  3  | 
+  4  | export class ProductsPage extends BasePage {
+  5  |   readonly searchInput: Locator;
+  6  |   readonly searchButton: Locator;
+  7  |   readonly firstProductOverlay: Locator;
+  8  |   readonly firstAddToCartBtn: Locator;
+  9  |   readonly continueShoppingBtn: Locator;
+  10 | 
+  11 |   constructor(page: Page) {
+  12 |     super(page);
+  13 |     this.searchInput = page.locator('#search_product');
+  14 |     this.searchButton = page.locator('#submit_search');
+  15 |     this.firstProductOverlay = page.locator('.product-image-wrapper').first();
+  16 |     this.firstAddToCartBtn = page.locator('.add-to-cart').first();
+  17 |     this.continueShoppingBtn = page.locator('.close-checkout-modal');
+  18 |   }
+  19 | 
+  20 |   async searchProduct(name: string) {
+  21 |     await this.searchInput.fill(name);
+  22 |     await this.searchButton.click();
+  23 |   }
+  24 | 
+  25 |   async addFirstProductToCart() {
+  26 |     await this.firstProductOverlay.hover();
+  27 |     await this.firstAddToCartBtn.click();
+> 28 |     await this.continueShoppingBtn.click(); // Handles dynamic modal interaction
+     |                                    ^ Error: locator.click: Test timeout of 30000ms exceeded.
+  29 |   }
+  30 | }
+  31 | 
+```

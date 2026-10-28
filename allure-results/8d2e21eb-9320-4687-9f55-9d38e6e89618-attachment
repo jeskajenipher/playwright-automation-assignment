@@ -1,0 +1,16 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: api-tests.spec.ts >> Automation Exercise REST API Validation Engine >> API 1: Get All Products List
+- Location: tests\api-tests.spec.ts:17:7
+
+# Error details
+
+```
+Test timeout of 30000ms exceeded.
+```

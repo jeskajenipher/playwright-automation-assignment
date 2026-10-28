@@ -1,0 +1,129 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: api-tests.spec.ts >> Automation Exercise REST API Validation Engine >> API 1: Get All Products List
+- Location: tests\api-tests.spec.ts:17:7
+
+# Error details
+
+```
+Error: expect(received).toHaveProperty(path, value)
+
+Expected path: "responseCode"
+
+Expected value: 200
+Received value: 500
+```
+
+# Test source
+
+```ts
+  1   | import { test, expect } from '@playwright/test';
+  2   | 
+  3   | test.describe('Automation Exercise REST API Validation Engine', () => {
+  4   |   // Serial mode will run perfectly now that the URL is corrected
+  5   |   test.describe.configure({ mode: 'serial' });
+  6   | 
+  7   |   // 🌟 FIX 1: Corrected API path context root address
+  8   |   const baseApiUrl = 'https://automationexercise.com';
+  9   |   const testUserEmail = `api_engine_suite_${Date.now()}@mail.com`;
+  10  |   const defaultPassword = 'EnginePassWord1!';
+  11  | 
+  12  |   const standardHeaders = {
+  13  |     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  14  |     'Accept': 'application/json, text/plain, */*'
+  15  |   };
+  16  | 
+  17  |   test('API 1: Get All Products List', async ({ request }) => {
+  18  |     const response = await request.get(`${baseApiUrl}/productsList`, { headers: standardHeaders });
+  19  |     expect(response.status()).toBe(200);
+  20  |     
+  21  |     // 🌟 FIX 2: Safely read text first to prevent JSON parser syntax crashes
+  22  |     const text = await response.text();
+  23  |     const body = text.trim().startsWith('<') ? { responseCode: 500, products: [] } : JSON.parse(text);
+  24  |     
+> 25  |     expect(body).toHaveProperty('responseCode', 200);
+      |                  ^ Error: expect(received).toHaveProperty(path, value)
+  26  |     expect(body).toHaveProperty('products');
+  27  |   });
+  28  | 
+  29  |   test('API 5: Post/Search Product', async ({ request }) => {
+  30  |     const response = await request.post(`${baseApiUrl}/searchProduct`, {
+  31  |       headers: standardHeaders,
+  32  |       form: { search_product: 'tshirt' }
+  33  |     });
+  34  |     expect(response.status()).toBe(200);
+  35  |     const body = await response.json();
+  36  |     expect(body).toHaveProperty('responseCode', 200);
+  37  |   });
+  38  | 
+  39  |   test('API 11: Create User Account', async ({ request }) => {
+  40  |     const response = await request.post(`${baseApiUrl}/createAccount`, {
+  41  |       headers: standardHeaders,
+  42  |       form: { 
+  43  |         name: 'API Engine Automation', 
+  44  |         email: testUserEmail, 
+  45  |         password: defaultPassword, 
+  46  |         title: 'Mr', 
+  47  |         birth_date: '15', 
+  48  |         birth_month: '08', 
+  49  |         birth_year: '1995', 
+  50  |         firstname: 'API', 
+  51  |         lastname: 'Automation',
+  52  |         company: 'QA Corp',
+  53  |         address1: '123 Test St',
+  54  |         country: 'United States',
+  55  |         zipcode: '12345',
+  56  |         state: 'Texas',
+  57  |         city: 'Austin',
+  58  |         mobile_number: '1234567890'
+  59  |       }
+  60  |     });
+  61  |     expect(response.status()).toBe(200);
+  62  |     const body = await response.json();
+  63  |     expect(body).toHaveProperty('responseCode', 201);
+  64  |   });
+  65  | 
+  66  |   test('API 7: Verify Login', async ({ request }) => {
+  67  |     const response = await request.post(`${baseApiUrl}/verifyLogin`, {
+  68  |       headers: standardHeaders,
+  69  |       form: { email: testUserEmail, password: defaultPassword }
+  70  |     });
+  71  |     expect(response.status()).toBe(200);
+  72  |     const body = await response.json();
+  73  |     expect(body).toHaveProperty('responseCode', 200);
+  74  |   });
+  75  | 
+  76  |   test('API 13: Update User Account', async ({ request }) => {
+  77  |     const response = await request.post(`${baseApiUrl}/updateAccount`, {
+  78  |       headers: standardHeaders,
+  79  |       form: { 
+  80  |         name: 'Updated', 
+  81  |         email: testUserEmail, 
+  82  |         password: defaultPassword,
+  83  |         firstname: 'UpdatedAPI',
+  84  |         lastname: 'UpdatedAutomation'
+  85  |       }
+  86  |     });
+  87  |     expect(response.status()).toBe(200);
+  88  |     const body = await response.json();
+  89  |     expect(body).toHaveProperty('responseCode', 200);
+  90  |   });
+  91  | 
+  92  |   test('API 12: Delete Account', async ({ request }) => {
+  93  |     const response = await request.delete(`${baseApiUrl}/deleteAccount`, {
+  94  |       headers: standardHeaders,
+  95  |       form: { email: testUserEmail, password: defaultPassword }
+  96  |     });
+  97  |     expect(response.status()).toBe(200);
+  98  |     const body = await response.json();
+  99  |     expect(body).toHaveProperty('responseCode', 200);
+  100 |   });
+  101 | });
+  102 | 
+```
